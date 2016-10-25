@@ -3,6 +3,8 @@ const models = require('../models');
 
 // get the Cat model
 const Cat = models.Cat.CatModel;
+const Dog = models.Dog.DogModel;
+
 
 // default fake data so that we have something to work with until we make a real Cat
 const defaultData = {
@@ -43,6 +45,10 @@ const readAllCats = (req, res, callback) => {
   Cat.find(callback);
 };
 
+const readAllDogs = (req, res, callback) => {
+  Dog.find(callback);
+};
+
 
 // function to find a specific cat on request.
 // Express functions always receive the request and the response.
@@ -66,6 +72,21 @@ const readCat = (req, res) => {
   // Behind the scenes this runs the findOne method.
   // You can find the findByName function in the model file.
   Cat.findByName(name1, callback);
+};
+
+const readDog = (req, res) => {
+  const name1 = req.query.name;
+
+  const callback = (err, doc) => {
+    if (err) {
+      return res.json({ err }); // if error, return it
+    }
+
+    // return success
+    return res.json(doc);
+  };
+
+  Dog.findByDogName(name1, callback);
 };
 
 // function to handle requests to the page1 page
@@ -112,6 +133,19 @@ const hostPage3 = (req, res) => {
   res.render('page3');
 };
 
+const hostPage4 = (req, res) => {
+  const callback = (err, docs) => {
+    if (err) {
+      return res.json({ err }); // if error, return it
+    }
+
+    // return success
+    return res.render('page4', { dogs: docs });
+  };
+
+  readAllDogs(req, res, callback);
+}
+
 // function to handle get request to send the name
 // controller functions in Express receive the full HTTP request
 // and a pre-filled out response object to send
@@ -140,28 +174,57 @@ const setName = (req, res) => {
   // if required fields are good, then set name
   const name = `${req.body.firstname} ${req.body.lastname}`;
 
-  // dummy JSON to insert into database
-  const catData = {
-    name,
-    bedsOwned: req.body.beds,
-  };
+
+
+
+  //=======================DOG============================
 
   // create a new object of CatModel with the object to save
-  const newCat = new Cat(catData);
+  const newDog = new Dog(dogData);
 
-  // Save the newCat object to the database
-  return newCat.save((err) => {
+  return newDog.save((err) => {
     if (err) {
       return res.json({ err }); // if error, return it
     }
 
-    // set the lastAdded cat to our newest cat object.
-    // This way we can update it dynamically
-    lastAdded = newCat;
+    lastAdded = newDog;
 
     // return success
     return res.json({ name });
   });
+};
+
+// dummy JSON to insert into database
+const dogData = {
+  name,
+  breed,
+  age,
+};
+//=======================================================
+
+
+// dummy JSON to insert into database
+const catData = {
+  name,
+  bedsOwned: req.body.beds,
+};
+
+// create a new object of CatModel with the object to save
+const newCat = new Cat(catData);
+
+// Save the newCat object to the database
+return newCat.save((err) => {
+  if (err) {
+    return res.json({ err }); // if error, return it
+  }
+
+  // set the lastAdded cat to our newest cat object.
+  // This way we can update it dynamically
+  lastAdded = newCat;
+
+  // return success
+  return res.json({ name });
+});
 };
 
 
@@ -252,7 +315,9 @@ module.exports = {
   page1: hostPage1,
   page2: hostPage2,
   page3: hostPage3,
+  page4: hostPage4,
   readCat,
+  readDog,
   getName,
   setName,
   updateLast,
