@@ -5,21 +5,21 @@
 // then mongoose will give you the active DB connection which is what we want
 const mongoose = require('mongoose');
 
-//Set mongoose's Promise to ES6 promises. 
+//Set mongoose's Promise to ES6 promises.
 //Mongoose prefers its promises features are override with a true promise library.
 //This usually means either native ES6 promises or a library like bluebird.
-//A promise is an object or construct of future code. 
+//A promise is an object or construct of future code.
 //Basically a promise is a placeholder for something that has not been computed yet.
 //Essentially you want to do a task that may take some time. You create a promise.
-//Then your code moves on without the promise really doing anything. 
+//Then your code moves on without the promise really doing anything.
 //Your code can check to see if the promise has been fulfilled yet. It's possible the
-//code in the promise has completed, has not completed or will never complete. 
-//Based on that, you can make decisions later in code. 
+//code in the promise has completed, has not completed or will never complete.
+//Based on that, you can make decisions later in code.
 //You can also say what to do when the promise completes.
 //At first promises may look confusing. Your code creates a promise of code to run, then
-//your code moves on doing other stuff. The result of that promise is probably null 
+//your code moves on doing other stuff. The result of that promise is probably null
 //because it has not run yet. At some point in the future, that promise will run,
-//and execute the code of the promise. 
+//and execute the code of the promise.
 //For some operations this is completely necessary, such as database i/o.
 //Databases are an external application (often not even on the same machine).
 //Waiting for the database code to finish is very expensive because you don't know
@@ -29,7 +29,7 @@ const mongoose = require('mongoose');
 //code to finish. That means your server starts dropping requests or outright failing.
 //Promises (and also threads) prevent this from occurring by letting your code continue on
 //with the promise that the database code may or may not eventually finish.
-//Later in your code, you can check to see which occurred. 
+//Later in your code, you can check to see which occurred.
 mongoose.Promise = global.Promise;
 
 // variable to hold our Model
